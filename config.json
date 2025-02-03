@@ -1,6 +1,12 @@
 {
     "title":"inv my",
     "subTitle":"不亏钱、赚钱、赚大钱",
-    "avatarUrl":"https://github.githubassets.com/favicons/favicon.svg",
-    "GMEEK_VERSION":"last"
+    "homeUrl":"https://invmy.us.kg",
+    "avatarUrl":"https://invmy.us.kg/favicon.svg",
+    "ogImage":"https://invmy.us.kg/favicon.svg",
+    "GMEEK_VERSION":"last",
+    "startSite":"01/01/2025",
+    "needComment":1
+    "showPostSource":0,
+    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>",
 }
