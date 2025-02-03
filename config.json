@@ -12,7 +12,7 @@
     "themeMode":"fix",
     "dayTheme":"dark",
     "nightTheme":"photon-dark",
-    "urlMode":"issue",
+    "urlMode":"pinyin",
     "script":"<script src='../assets/ArticleTOC.js'></script>",
     "singlePage":["economic-calendar"],
     "iconList":{
