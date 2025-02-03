@@ -54,8 +54,6 @@ scw instance server stop <实例的InstanceID>
 
 ## 救援恢复模式启动
 
-![](/uploads/设置救援模式.png)
-
 * 在实例管理面板的 Advanced settings 选项卡中，选中 Use rescue image，保存
 * 面板关机：左侧 Instances，进入实例管理面板，右上角开关，开机
 * 重启后耐心等待 10 分钟，通过创建的 SSH Key 连接实例，执行命令：
@@ -76,7 +74,6 @@ wget -qO- https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-vir
 * 更改硬盘启动：实例管理面板，Advanced settings 选项卡
 * 选中 Use local boot，保存，Boot volume 选择 1GB 硬盘，保存，开机
 
-![](/uploads/设置硬盘启动.png)
 
 # 安装 Alpine Linux
 
@@ -84,7 +81,6 @@ wget -qO- https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-vir
 
 实例 overview 选项卡 的右上方 进入 console，再进行开机
 
-![](/uploads/登录console.avif)
 
 ## 前置配置
 

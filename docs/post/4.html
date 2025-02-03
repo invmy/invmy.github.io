@@ -168,7 +168,6 @@ scw instance server stop &lt;实例的InstanceID&gt;
 <li>删除 10GB 硬盘：左侧 Instances，Volumes 选项卡，旧 10GB 硬盘右侧三个点选 Delete 删除</li>
 </ul>
 <h2>救援恢复模式启动</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="/uploads/%E8%AE%BE%E7%BD%AE%E6%95%91%E6%8F%B4%E6%A8%A1%E5%BC%8F.png"><img src="/uploads/%E8%AE%BE%E7%BD%AE%E6%95%91%E6%8F%B4%E6%A8%A1%E5%BC%8F.png" alt="" style="max-width: 100%;"></a></p>
 <ul>
 <li>在实例管理面板的 Advanced settings 选项卡中，选中 Use rescue image，保存</li>
 <li>面板关机：左侧 Instances，进入实例管理面板，右上角开关，开机</li>
@@ -188,11 +187,9 @@ wget -qO- https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-vir
 <li>更改硬盘启动：实例管理面板，Advanced settings 选项卡</li>
 <li>选中 Use local boot，保存，Boot volume 选择 1GB 硬盘，保存，开机</li>
 </ul>
-<p><a target="_blank" rel="noopener noreferrer" href="/uploads/%E8%AE%BE%E7%BD%AE%E7%A1%AC%E7%9B%98%E5%90%AF%E5%8A%A8.png"><img src="/uploads/%E8%AE%BE%E7%BD%AE%E7%A1%AC%E7%9B%98%E5%90%AF%E5%8A%A8.png" alt="" style="max-width: 100%;"></a></p>
 <h1>安装 Alpine Linux</h1>
 <h2>进入Console</h2>
 <p>实例 overview 选项卡 的右上方 进入 console，再进行开机</p>
-<p><a target="_blank" rel="noopener noreferrer" href="/uploads/%E7%99%BB%E5%BD%95console.avif"><img src="/uploads/%E7%99%BB%E5%BD%95console.avif" alt="" style="max-width: 100%;"></a></p>
 <h2>前置配置</h2>
 <pre class="notranslate"><code class="notranslate">mkdir /media/setup
 cp -a /media/vda/* /media/setup
