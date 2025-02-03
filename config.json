@@ -1,6 +1,6 @@
 {
-    "title":"inv my",
-    "subTitle":"不亏钱、赚钱、赚大钱",
+    "title":"invmy",
+    "subTitle":"1、Don’t loss, 2、make gain, 3、make big gain",
     "homeUrl":"https://invmy.us.kg",
     "avatarUrl":"https://invmy.us.kg/favicon.svg",
     "ogImage":"https://invmy.us.kg/favicon.svg",
@@ -9,6 +9,7 @@
     "i18n":"CN",
     "needComment":1,
     "showPostSource":0,
+    "urlMode":"issue",
     "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/articletoc.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>",
     "singlePage":["economic-calendar"],
     "iconList":{
