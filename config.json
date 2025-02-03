@@ -13,7 +13,6 @@
     "dayTheme":"dark",
     "nightTheme":"photon-dark",
     "urlMode":"issue",
-    "allHead":"<script src='../assets/Theme.js'></script>",
     "script":"<script src='../assets/ArticleTOC.js'></script>",
     "singlePage":["economic-calendar"],
     "iconList":{
