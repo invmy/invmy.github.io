@@ -282,7 +282,8 @@ sysctl -p
  
 //出现以下内容表示成功：tcp_bbr
 </code></pre>
-<h2>IPV4出口 安装warp</h2>
+<h2>IPV4出口</h2>
+<h3>(选择1) 安装warp</h3>
 <p><a href="https://gitlab.com/fscarmen/warp" rel="nofollow">https://gitlab.com/fscarmen/warp</a></p>
 <p>ipv6可能无法访问部分资源，需要提前设置ipv4出口</p>
 <pre class="notranslate"><code class="notranslate">安装bash
@@ -292,7 +293,18 @@ apk add bash
 wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh &amp;&amp; bash menu.sh
 
 选择为 IPv6 only 添加 WARP IPv4 网络接口 (bash menu.sh 4)
-</code></pre></div>
+
+### (选择2) DNS64
+
+https://nat64.xyz/ 这里查看更多
+
+修改 /etc/resolv.conf
+
+</code></pre>
+<p>nameserver 2a00:1098:2c::1<br>
+nameserver 2a01:4f9:c010:3f02::1<br>
+nameserver 2a00:1098:2b::1</p>
+<pre class="notranslate"><code class="notranslate"></code></pre></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
