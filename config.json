@@ -24,4 +24,5 @@
     "exlink":{
         "pa":"https://pa.invmy.us.kg"
     }
+    "primerCSS":"<link href='https://cdnjs.cloudflare.com/ajax/libs/Primer/21.1.1/primer.css' rel='stylesheet' />",
 }
