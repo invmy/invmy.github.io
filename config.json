@@ -13,6 +13,7 @@
     "dayTheme":"dark",
     "nightTheme":"photon-dark",
     "urlMode":"pinyin",
+    "primerCSS":"<link href='https://cdnjs.cloudflare.com/ajax/libs/Primer/21.1.1/primer.css' rel='stylesheet' />",
     "script":"<script src='../assets/ArticleTOC.js'></script>",
     "singlePage":["economic-calendar"],
     "iconList":{
@@ -24,5 +25,4 @@
     "exlink":{
         "pa":"https://pa.invmy.us.kg"
     }
-    "primerCSS":"<link href='https://cdnjs.cloudflare.com/ajax/libs/Primer/21.1.1/primer.css' rel='stylesheet' />",
 }
