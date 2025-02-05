@@ -228,11 +228,17 @@ wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
 
 选择为 IPv6 only 添加 WARP IPv4 网络接口 (bash menu.sh 4)
 
+```
+
 ### (选择2) DNS64
 
 https://nat64.xyz/ 这里查看更多
 
+探针列表 https://stats.uptimerobot.com/GQ5RyTJLKZ
+
 修改 /etc/resolv.conf
+
+
 
 ```
 nameserver 2a00:1098:2c::1
