@@ -22,4 +22,4 @@ src 填写存放图片的位置
 cdn 如无其他cdn保持默认
 api 如无其他api地址保持默认
 
-<img src="https://cdn.jsdelivr.net/gh/invmv/invmv.github.io/img/1738648199.jpeg">
+<img src="https://cdn.jsdelivr.net/gh/invmv/invmv.github.io/img/inote/1738648199.jpeg">
