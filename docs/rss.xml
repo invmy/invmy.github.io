@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>invmy</title><link>https://invmy.us.kg</link><description>Don't loss/make gain/make big gain</description><copyright>invmy</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>../favicon.svg</url><title>avatar</title><link>https://invmy.us.kg</link></image><lastBuildDate>Thu, 06 Feb 2025 06:20:33 +0000</lastBuildDate><managingEditor>invmy</managingEditor><ttl>60</ttl><webMaster>invmy</webMaster><item><title>快捷指令上发送GitHub issues</title><link>https://invmy.us.kg/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</link><description># 文档
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>invmy</title><link>https://invmy.us.kg</link><description>Don't loss/make gain/make big gain</description><copyright>invmy</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>../favicon.svg</url><title>avatar</title><link>https://invmy.us.kg</link></image><lastBuildDate>Thu, 06 Feb 2025 06:22:32 +0000</lastBuildDate><managingEditor>invmy</managingEditor><ttl>60</ttl><webMaster>invmy</webMaster><item><title>快捷指令上发送GitHub issues</title><link>https://invmy.us.kg/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</link><description># 文档
 
 https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
 
@@ -45,5 +45,7 @@ xray项目：https://github.com/XTLS/Xray-core
 
 在网站后面加入标签名即可查看该标签的文章中所使用的图片比如
 
-[/inote](url)
+[/inote](/inote)
+
+# 更多....
 。</description><guid isPermaLink="true">https://invmy.us.kg/link.html</guid><pubDate>Thu, 06 Feb 2025 04:24:52 +0000</pubDate></item></channel></rss>
