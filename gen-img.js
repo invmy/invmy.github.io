@@ -18,12 +18,15 @@ function getImages(folderPath) {
     return files
         .filter(file => /\.(jpg|jpeg|png|gif|webp|avif)$/.test(file))
         .map(file => {
-            const tags = file.split('-').slice(0, -1);
-            const timestamp = parseInt(file.split('-')[0], 10); // 获取 Unix 时间戳
-            return { name: file, tags, timestamp }; // 记录时间戳
+            const fileParts = file.split('-');
+            const timestamp = parseInt(fileParts[0], 10); // 提取时间戳
+            const tags = fileParts.slice(1, -1); // 去除时间戳并获取其他标签
+
+            return { name: file, tags, timestamp }; // 返回文件名、标签和时间戳
         })
         .sort((a, b) => b.timestamp - a.timestamp); // 根据时间戳降序排序
 }
+
 
 // 生成 HTML 内容
 function generateHTML(images, folderName) {
