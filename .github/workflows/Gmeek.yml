@@ -64,7 +64,7 @@ jobs:
         run: npm install  # 如果有需要安装的依赖
 
       - name: Generate image pages html
-        run: node gen-img.js  # 运行生成 HTML 的脚本  
+        run: node gen-img.js & rm package-lock.json  # 运行生成 HTML 的脚本  
       
       - name: update html
         run: |
