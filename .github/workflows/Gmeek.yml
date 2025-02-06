@@ -55,6 +55,17 @@ jobs:
           cp -a /opt/Gmeek/backup ${{ github.workspace }} 
           cp /opt/Gmeek/blogBase.json ${{ github.workspace }} 
           
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'  # 或根据需要修改 Node.js 版本
+      
+      - name: Install Dependencies
+        run: npm install  # 如果有需要安装的依赖
+
+      - name: Generate image pages html
+        run: node gen-img.js  # 运行生成 HTML 的脚本  
+      
       - name: update html
         run: |
           git config --local user.email "$(jq -r ".email" config.json)"
