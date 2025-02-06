@@ -19,8 +19,10 @@ function getImages(folderPath) {
         .filter(file => /\.(jpg|jpeg|png|gif|webp|avif)$/.test(file))
         .map(file => {
             const tags = file.split('-').slice(0, -1);
-            return { name: file, tags };
-        });
+            const timestamp = parseInt(file.split('-')[0], 10); // 获取 Unix 时间戳
+            return { name: file, tags, timestamp }; // 记录时间戳
+        })
+        .sort((a, b) => b.timestamp - a.timestamp); // 根据时间戳降序排序
 }
 
 // 生成 HTML 内容
