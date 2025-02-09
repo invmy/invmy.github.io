@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>invmy</title><link>https://invmv.github.io</link><description>Don't loss/make gain/make big gain</description><copyright>invmy</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>../favicon.svg</url><title>avatar</title><link>https://invmv.github.io</link></image><lastBuildDate>Sun, 09 Feb 2025 05:30:45 +0000</lastBuildDate><managingEditor>invmy</managingEditor><ttl>60</ttl><webMaster>invmy</webMaster><item><title>Alpine Linux中无Docker部署vaultwarden开源密码管理</title><link>https://invmv.github.io/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html</link><description># 开始
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>invmy</title><link>https://invmy.github.io</link><description>Don't loss/make gain/make big gain</description><copyright>invmy</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>../favicon.svg</url><title>avatar</title><link>https://invmy.github.io</link></image><lastBuildDate>Sun, 09 Feb 2025 05:42:10 +0000</lastBuildDate><managingEditor>invmy</managingEditor><ttl>60</ttl><webMaster>invmy</webMaster><item><title>Alpine Linux中无Docker部署vaultwarden开源密码管理</title><link>https://invmy.github.io/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html</link><description># 开始
 
 在不足1GB的硬盘再部署docker坏境连镜像都拉不下来更别说部署了
 
-主要是硬盘太小，内存配置是完全足够的，0.14欧的机子作为，每个月1块钱，体验全云端的密码管理。</description><guid isPermaLink="true">https://invmv.github.io/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html</guid><pubDate>Sat, 08 Feb 2025 10:41:11 +0000</pubDate></item><item><title>快捷指令上发送GitHub issues</title><link>https://invmv.github.io/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</link><description># 文档
+主要是硬盘太小，内存配置是完全足够的，0.14欧的机子作为，每个月1块钱，体验全云端的密码管理。</description><guid isPermaLink="true">https://invmy.github.io/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html</guid><pubDate>Sat, 08 Feb 2025 10:41:11 +0000</pubDate></item><item><title>快捷指令上发送GitHub issues</title><link>https://invmy.github.io/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</link><description># 文档
 
 https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
 
@@ -14,7 +14,7 @@ https://github.com/settings/personal-access-tokens
 # 成品
 https://www.icloud.com/shortcuts/1445a4ce30dc4ccbb15e7090b4c3e9ff
 
-支持多图，只能放在在文章前面。</description><guid isPermaLink="true">https://invmv.github.io/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</guid><pubDate>Mon, 03 Feb 2025 12:51:53 +0000</pubDate></item><item><title>Scaleway STARDUST安装 alpine linux DD方式支持救砖</title><link>https://invmv.github.io/post/Scaleway%20STARDUST-an-zhuang-%20alpine%20linux%20DD-fang-shi-zhi-chi-jiu-zhuan.html</link><description># 参考文章
+支持多图，只能放在在文章前面。</description><guid isPermaLink="true">https://invmy.github.io/post/kuai-jie-zhi-ling-shang-fa-song-GitHub%20issues.html</guid><pubDate>Mon, 03 Feb 2025 12:51:53 +0000</pubDate></item><item><title>Scaleway STARDUST安装 alpine linux DD方式支持救砖</title><link>https://invmy.github.io/post/Scaleway%20STARDUST-an-zhuang-%20alpine%20linux%20DD-fang-shi-zhi-chi-jiu-zhuan.html</link><description># 参考文章
 
 * https://yushum.com/archives/1118
 *https://blog.akebinukui.eu.org/2023/09/19/%e6%95%99%e7%a8%8b%e6%96%b0%e7%89%88scaleway%e6%98%9f%e5%b0%98%f0%9f%a4%a11c1g1g%e9%b8%a1alpine-linux%e7%8e%a9%e6%b3%95/
@@ -41,11 +41,11 @@ ssh-key 添加：https://console.scaleway.com/project/ssh-keys
  
 波兰：scw instance server create zone=pl-waw-2 root-volume=local:10GB name=pl type=STARDUST1-S ipv6=true ip=none
  
-#返回服务器信息表示命令执行成功。</description><guid isPermaLink="true">https://invmv.github.io/post/Scaleway%20STARDUST-an-zhuang-%20alpine%20linux%20DD-fang-shi-zhi-chi-jiu-zhuan.html</guid><pubDate>Mon, 03 Feb 2025 09:01:53 +0000</pubDate></item><item><title>Alpine Linux 手动部署xray程序 支持更新core和dat</title><link>https://invmv.github.io/post/Alpine%20Linux%20-shou-dong-bu-shu-xray-cheng-xu-%20-zhi-chi-geng-xin-core-he-dat.html</link><description># 介绍
+#返回服务器信息表示命令执行成功。</description><guid isPermaLink="true">https://invmy.github.io/post/Scaleway%20STARDUST-an-zhuang-%20alpine%20linux%20DD-fang-shi-zhi-chi-jiu-zhuan.html</guid><pubDate>Mon, 03 Feb 2025 09:01:53 +0000</pubDate></item><item><title>Alpine Linux 手动部署xray程序 支持更新core和dat</title><link>https://invmy.github.io/post/Alpine%20Linux%20-shou-dong-bu-shu-xray-cheng-xu-%20-zhi-chi-geng-xin-core-he-dat.html</link><description># 介绍
 
 xray项目：https://github.com/XTLS/Xray-core
 
-适用于已有config配置，但不想使用脚本/ui面板的用户。</description><guid isPermaLink="true">https://invmv.github.io/post/Alpine%20Linux%20-shou-dong-bu-shu-xray-cheng-xu-%20-zhi-chi-geng-xin-core-he-dat.html</guid><pubDate>Mon, 03 Feb 2025 08:49:37 +0000</pubDate></item><item><title>economic-calendar</title><link>https://invmv.github.io/economic-calendar.html</link><description>`Gmeek-html&lt;iframe allowtransparency='true' height='720' src='https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&amp;amp;category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&amp;amp;importance=2,3&amp;amp;features=datepicker,timezone,timeselector,filters&amp;amp;countries=17,35,72,5,4,39&amp;amp;calType=week&amp;amp;timeZone=28&amp;amp;lang=6' style='border:0' width='100%'&gt;&lt;/iframe&gt;`。</description><guid isPermaLink="true">https://invmv.github.io/economic-calendar.html</guid><pubDate>Mon, 03 Feb 2025 06:28:07 +0000</pubDate></item><item><title>link</title><link>https://invmv.github.io/link.html</link><description># 站内图片
+适用于已有config配置，但不想使用脚本/ui面板的用户。</description><guid isPermaLink="true">https://invmy.github.io/post/Alpine%20Linux%20-shou-dong-bu-shu-xray-cheng-xu-%20-zhi-chi-geng-xin-core-he-dat.html</guid><pubDate>Mon, 03 Feb 2025 08:49:37 +0000</pubDate></item><item><title>economic-calendar</title><link>https://invmy.github.io/economic-calendar.html</link><description>`Gmeek-html&lt;iframe allowtransparency='true' height='720' src='https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&amp;amp;category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&amp;amp;importance=2,3&amp;amp;features=datepicker,timezone,timeselector,filters&amp;amp;countries=17,35,72,5,4,39&amp;amp;calType=week&amp;amp;timeZone=28&amp;amp;lang=6' style='border:0' width='100%'&gt;&lt;/iframe&gt;`。</description><guid isPermaLink="true">https://invmy.github.io/economic-calendar.html</guid><pubDate>Mon, 03 Feb 2025 06:28:07 +0000</pubDate></item><item><title>link</title><link>https://invmy.github.io/link.html</link><description># 站内图片
 
 在网站后面加入标签名
 即可查看该标签的文章中所使用的图片
@@ -55,4 +55,4 @@ xray项目：https://github.com/XTLS/Xray-core
 [/brooks](/brooks)
 [/priceaction](/priceaction)
 # 更多....
-。</description><guid isPermaLink="true">https://invmv.github.io/link.html</guid><pubDate>Thu, 06 Feb 2025 04:24:52 +0000</pubDate></item></channel></rss>
+。</description><guid isPermaLink="true">https://invmy.github.io/link.html</guid><pubDate>Thu, 06 Feb 2025 04:24:52 +0000</pubDate></item></channel></rss>

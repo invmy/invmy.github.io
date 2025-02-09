@@ -6,7 +6,7 @@
 
 结果预览
 
-<img src="https://cdn.jsdelivr.net/gh/invmv/invmv.github.io/img/blog/1739007188-caddy-Vaultwarden-htop.png">
+<img src="https://cdn.jsdelivr.net/gh/invmy/invmy.github.io/img/blog/1739007188-caddy-Vaultwarden-htop.png">
 
 
 # 需要的东西
