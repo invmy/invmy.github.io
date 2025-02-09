@@ -182,9 +182,14 @@ sudo setcap cap_net_bind_service=+ep $(which caddy)
         admin off
 }
 
+a.bb.cc:80 {
+        redir https://a.bb.cc:8443
+}
+
 a.bb.cc:8443 {
         redir /admin /# 301
         reverse_proxy :8000
+        tls /root/crt.pem /root/key.pem
 }
 </code></pre>
 <p>将<code class="notranslate">a.bb.cc</code>改为你的域名。如果使用443，直接删除<code class="notranslate">:8443</code>即可</p>

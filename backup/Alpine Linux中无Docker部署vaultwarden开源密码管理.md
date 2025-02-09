@@ -133,9 +133,14 @@ sudo setcap cap_net_bind_service=+ep $(which caddy)
         admin off
 }
 
+a.bb.cc:80 {
+        redir https://a.bb.cc:8443
+}
+
 a.bb.cc:8443 {
         redir /admin /# 301
         reverse_proxy :8000
+        tls /root/crt.pem /root/key.pem
 }
 ```
 
