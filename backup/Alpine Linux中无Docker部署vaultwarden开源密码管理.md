@@ -60,9 +60,9 @@ vaultwarden hash
 ```
 按要求输入大于八位数的密码，获得`ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$n1kWQ'`
 
-编辑 /etc/init.d/vaultwarden 文件
+编辑 vi /etc/conf.d/vaultwarden 文件
 ```
-vi /etc/init.d/vaultwarden
+vi /etc/conf.d/vaultwarden
 输入i进入编辑模式
 # WEB_VAULT_ENABLED改为true 
 # 最后一行加入export ADMIN_TOKEN=''
@@ -116,7 +116,9 @@ cloudflare只支持部分端口，参见 [cloudflare](https://developers.cloudfl
 
 修改完保存，再执行`caddy fmt --overwrite /etc/caddy/Caddyfile` 格式化一下caddyfile
 
-手动start可能会出现未知的文件，直接`reboot` 。重启之后`cat /var/log/messages`查看系统log。开机检查`rc-status`
+手动start可能会出现未知的BUG，直接`reboot` 。
+
+重启之后`cat /var/log/messages`查看系统log。开机检查`rc-status`
 
 无问题应该可以使用域名+端口进行访问了。
 

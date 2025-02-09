@@ -121,8 +121,8 @@ cp -r web-vault/* /usr/share/webapps/vaultwarden-web/
 <pre class="notranslate"><code class="notranslate">vaultwarden hash
 </code></pre>
 <p>按要求输入大于八位数的密码，获得<code class="notranslate">ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$n1kWQ'</code></p>
-<p>编辑 /etc/init.d/vaultwarden 文件</p>
-<pre class="notranslate"><code class="notranslate">vi /etc/init.d/vaultwarden
+<p>编辑 vi /etc/conf.d/vaultwarden 文件</p>
+<pre class="notranslate"><code class="notranslate">vi /etc/conf.d/vaultwarden
 输入i进入编辑模式
 # WEB_VAULT_ENABLED改为true 
 # 最后一行加入export ADMIN_TOKEN=''
@@ -161,7 +161,8 @@ a.bb.cc:8443 {
 <p>端口 如果不使用cloudflare支持任意端口。请勿使用被占用的端口，其他程序可能会crashed。开机检查<code class="notranslate">rc-status</code><br>
 cloudflare只支持部分端口，参见 <a href="https://developers.cloudflare.com/fundamentals/reference/network-ports/" rel="nofollow">cloudflare</a></p>
 <p>修改完保存，再执行<code class="notranslate">caddy fmt --overwrite /etc/caddy/Caddyfile</code> 格式化一下caddyfile</p>
-<p>手动start可能会出现未知的文件，直接<code class="notranslate">reboot</code> 。重启之后<code class="notranslate">cat /var/log/messages</code>查看系统log。开机检查<code class="notranslate">rc-status</code></p>
+<p>手动start可能会出现未知的BUG，直接<code class="notranslate">reboot</code> 。</p>
+<p>重启之后<code class="notranslate">cat /var/log/messages</code>查看系统log。开机检查<code class="notranslate">rc-status</code></p>
 <p>无问题应该可以使用域名+端口进行访问了。</p>
 <h1>配置 Vaultwarden</h1>
 <p>访问路径 <code class="notranslate">/admin</code> 进入后台管理，官方文档 <a href="https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview">https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview</a></p>
