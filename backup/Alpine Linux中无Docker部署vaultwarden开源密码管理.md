@@ -13,6 +13,11 @@
 - Alpine Linux
 - 域名 (Vaultwarden仅支持Https访问，需要证书)
 - cloudflare? 应该不是必须
+- 
+# 域名
+
+使用A或者AAAA，将域名指向你的服务器IP
+cloudflare的SSL设置成`完全`更安全。没有证书直接被拦截
 
 # 部署 Vaultwarden
 
@@ -51,21 +56,47 @@ unzip *.zip
 cp -r web-vault/* /usr/share/webapps/vaultwarden-web/
 ```
 
-# 启动 Vaultwarden
+# 配置 Vaultwarden
 
-准备admin的token，备用
+官方文档 https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview
+更多变量请查看文档。现在只设置主要变量
+
+本文推荐使用`/etc/conf.d/vaultwarden`来进行配置，也就是系统变量。不经过网页，并屏蔽/admin的访问
 
 ```
-vaultwarden hash
-```
-按要求输入大于八位数的密码，获得`ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$n1kWQ'`
+vi /etc/conf.d/vaultwarden 
+#编辑文件
 
-编辑 vi /etc/conf.d/vaultwarden 文件
-```
-vi /etc/conf.d/vaultwarden
 输入i进入编辑模式
-# WEB_VAULT_ENABLED改为true 
-# 最后一行加入export ADMIN_TOKEN=''
+
+# safe
+export SHOW_PASSWORD_HINT=false
+
+# export DOMAIN=https://aa.bb.cc:443
+
+# 注册类
+export SIGNUPS_ALLOWED=false
+export INVITATIONS_ALLOWED=false
+
+# 禁止admin token
+export DISABLE_ADMIN_TOKEN=false
+
+# push 推送 https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification
+
+# export PUSH_ENABLED=true
+
+# export PUSH_INSTALLATION_ID=
+
+# export PUSH_INSTALLATION_KEY=
+
+# export PUSH_RELAY_URI=https://push.bitwarden.eu
+
+# export PUSH_IDENTITY_URI=https://identity.bitwarden.eu
+
+# limit限制
+
+export ROCKET_LIMITS={json=10485760
+
 按esc退出编辑，输入 :wq 保存并退出
 ```
 
@@ -76,10 +107,8 @@ vi /etc/conf.d/vaultwarden
 使用`rc-status` 检查是否crashed
 使用curl 检测是否成功运行输入 `curl 127.1:8000`
 
-# 域名
+如果不生效，请检测/var/lib/vaultwarden/目录下是否有config.json或.env 请删除
 
-使用A或者AAAA，将域名指向你的服务器IP
-cloudflare的SSL设置成`完全`更安全。没有证书直接被拦截
 
 # caddy反代并自动https证书
 
@@ -105,7 +134,8 @@ sudo setcap cap_net_bind_service=+ep $(which caddy)
 }
 
 a.bb.cc:8443 {
-	reverse_proxy :8000
+        redir /admin /# 301
+        reverse_proxy :8000
 }
 ```
 
@@ -122,9 +152,6 @@ cloudflare只支持部分端口，参见 [cloudflare](https://developers.cloudfl
 
 无问题应该可以使用域名+端口进行访问了。
 
-# 配置 Vaultwarden
-
-访问路径 `/admin` 进入后台管理，官方文档 https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview
 
 # 备份 
 

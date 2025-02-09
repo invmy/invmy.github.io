@@ -19,7 +19,7 @@
 
 主要是硬盘太小，内存配置是完全足够的，0.14欧的机子作为，每个月1块钱，体验全云端的密码管理。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://invmy.us.kg/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html">
+<meta property="og:url" content="https://invmv.github.io/post/Alpine%20Linux-zhong-wu-Docker-bu-shu-vaultwarden-kai-yuan-mi-ma-guan-li.html">
 <meta property="og:image" content="../favicon.svg">
 <title>Alpine Linux中无Docker部署vaultwarden开源密码管理</title>
 
@@ -66,7 +66,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     <div id="header">
 <h1 class="postTitle">Alpine Linux中无Docker部署vaultwarden开源密码管理</h1>
 <div class="title-right">
-    <a href="https://invmy.us.kg" id="buttonHome" class="btn btn-invisible circle" title="首页">
+    <a href="https://invmv.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
         <svg class="octicon" width="16" height="16">
             <path id="pathHome" fill-rule="evenodd"></path>
         </svg>
@@ -92,7 +92,11 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>Alpine Linux</li>
 <li>域名 (Vaultwarden仅支持Https访问，需要证书)</li>
 <li>cloudflare? 应该不是必须</li>
+<li></li>
 </ul>
+<h1>域名</h1>
+<p>使用A或者AAAA，将域名指向你的服务器IP<br>
+cloudflare的SSL设置成<code class="notranslate">完全</code>更安全。没有证书直接被拦截</p>
 <h1>部署 Vaultwarden</h1>
 <p><code class="notranslate">apk add vaultwarden</code></p>
 <p>可直接部署到系统</p>
@@ -116,25 +120,50 @@ unzip *.zip
 #复制web
 cp -r web-vault/* /usr/share/webapps/vaultwarden-web/
 </code></pre>
-<h1>启动 Vaultwarden</h1>
-<p>准备admin的token，备用</p>
-<pre class="notranslate"><code class="notranslate">vaultwarden hash
-</code></pre>
-<p>按要求输入大于八位数的密码，获得<code class="notranslate">ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$n1kWQ'</code></p>
-<p>编辑 vi /etc/conf.d/vaultwarden 文件</p>
-<pre class="notranslate"><code class="notranslate">vi /etc/conf.d/vaultwarden
+<h1>配置 Vaultwarden</h1>
+<p>官方文档 <a href="https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview">https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview</a><br>
+更多变量请查看文档。现在只设置主要变量</p>
+<p>本文推荐使用<code class="notranslate">/etc/conf.d/vaultwarden</code>来进行配置，也就是系统变量。不经过网页，并屏蔽/admin的访问</p>
+<pre class="notranslate"><code class="notranslate">vi /etc/conf.d/vaultwarden 
+#编辑文件
+
 输入i进入编辑模式
-# WEB_VAULT_ENABLED改为true 
-# 最后一行加入export ADMIN_TOKEN=''
+
+# safe
+export SHOW_PASSWORD_HINT=false
+
+# export DOMAIN=https://aa.bb.cc:443
+
+# 注册类
+export SIGNUPS_ALLOWED=false
+export INVITATIONS_ALLOWED=false
+
+# 禁止admin token
+export DISABLE_ADMIN_TOKEN=false
+
+# push 推送 https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification
+
+# export PUSH_ENABLED=true
+
+# export PUSH_INSTALLATION_ID=
+
+# export PUSH_INSTALLATION_KEY=
+
+# export PUSH_RELAY_URI=https://push.bitwarden.eu
+
+# export PUSH_IDENTITY_URI=https://identity.bitwarden.eu
+
+# limit限制
+
+export ROCKET_LIMITS={json=10485760
+
 按esc退出编辑，输入 :wq 保存并退出
 </code></pre>
 <p>接下来就可以启动了</p>
 <p><code class="notranslate">rc-service vaultwarden start</code>  支持 start/restart/stop</p>
 <p>使用<code class="notranslate">rc-status</code> 检查是否crashed<br>
 使用curl 检测是否成功运行输入 <code class="notranslate">curl 127.1:8000</code></p>
-<h1>域名</h1>
-<p>使用A或者AAAA，将域名指向你的服务器IP<br>
-cloudflare的SSL设置成<code class="notranslate">完全</code>更安全。没有证书直接被拦截</p>
+<p>如果不生效，请检测/var/lib/vaultwarden/目录下是否有config.json或.env 请删除</p>
 <h1>caddy反代并自动https证书</h1>
 <pre class="notranslate"><code class="notranslate">apk add caddy
 #安装caddy
@@ -154,7 +183,8 @@ sudo setcap cap_net_bind_service=+ep $(which caddy)
 }
 
 a.bb.cc:8443 {
-	reverse_proxy :8000
+        redir /admin /# 301
+        reverse_proxy :8000
 }
 </code></pre>
 <p>将<code class="notranslate">a.bb.cc</code>改为你的域名。如果使用443，直接删除<code class="notranslate">:8443</code>即可</p>
@@ -164,8 +194,6 @@ cloudflare只支持部分端口，参见 <a href="https://developers.cloudflare.
 <p>手动start可能会出现未知的BUG，直接<code class="notranslate">reboot</code> 。</p>
 <p>重启之后<code class="notranslate">cat /var/log/messages</code>查看系统log。开机检查<code class="notranslate">rc-status</code></p>
 <p>无问题应该可以使用域名+端口进行访问了。</p>
-<h1>配置 Vaultwarden</h1>
-<p>访问路径 <code class="notranslate">/admin</code> 进入后台管理，官方文档 <a href="https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview">https://github.com/dani-garcia/vaultwarden/wiki/Configuration-overview</a></p>
 <h1>备份</h1>
 <p><code class="notranslate">/var/lib/vaultwarden/</code> 备份整个文件夹</p>
 <p><code class="notranslate">/etc/conf.d/vaultwarden</code> admin配置文件，重新部署需要。</p>
@@ -176,7 +204,7 @@ cloudflare只支持部分端口，参见 <a href="https://developers.cloudflare.
 <div class="comments" id="comments"></div>
 
 </div>
-    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://invmy.us.kg">invmy</a></div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://invmv.github.io">invmy</a></div>
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
