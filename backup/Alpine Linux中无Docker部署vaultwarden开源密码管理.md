@@ -14,10 +14,13 @@
 - 域名 (Vaultwarden仅支持Https访问，需要证书)
 - cloudflare? 应该不是必须
 - 
-# 域名
+# 域名 证书
 
 使用A或者AAAA，将域名指向你的服务器IP
-cloudflare的SSL设置成`完全`更安全。没有证书直接被拦截
+cloudflare的SSL设置成`完全`
+
+自动生成证书可能会失效，SSL/TLS -> 源服务器 
+前往cloudflare生成15年有效期的证书，分别存为crt.pem，key.pem备用，
 
 # 部署 Vaultwarden
 
@@ -139,17 +142,23 @@ a.bb.cc:80 {
 
 a.bb.cc:8443 {
         redir /admin /# 301
-        reverse_proxy :8000
-        tls /root/crt.pem /root/key.pem
+        reverse_proxy :8000 {
+                header_up X-Real-IP {remote_host}
+        }
+
+        tls /crt.pem /key.pem
 }
 ```
 
 将`a.bb.cc`改为你的域名。如果使用443，直接删除`:8443`即可
 
+tls /crt.pem /key.pem 改为自己证书的目录
+
 端口 如果不使用cloudflare支持任意端口。请勿使用被占用的端口，其他程序可能会crashed。开机检查`rc-status`
 cloudflare只支持部分端口，参见 [cloudflare](https://developers.cloudflare.com/fundamentals/reference/network-ports/)
 
 修改完保存，再执行`caddy fmt --overwrite /etc/caddy/Caddyfile` 格式化一下caddyfile
+
 
 手动start可能会出现未知的BUG，直接`reboot` 。
 

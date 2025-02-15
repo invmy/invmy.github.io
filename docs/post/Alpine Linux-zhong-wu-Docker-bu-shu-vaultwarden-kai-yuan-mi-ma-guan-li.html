@@ -94,9 +94,11 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>cloudflare? 应该不是必须</li>
 <li></li>
 </ul>
-<h1>域名</h1>
+<h1>域名 证书</h1>
 <p>使用A或者AAAA，将域名指向你的服务器IP<br>
-cloudflare的SSL设置成<code class="notranslate">完全</code>更安全。没有证书直接被拦截</p>
+cloudflare的SSL设置成<code class="notranslate">完全</code></p>
+<p>自动生成证书可能会失效，SSL/TLS -&gt; 源服务器<br>
+前往cloudflare生成15年有效期的证书，分别存为crt.pem，key.pem备用，</p>
 <h1>部署 Vaultwarden</h1>
 <p><code class="notranslate">apk add vaultwarden</code></p>
 <p>可直接部署到系统</p>
@@ -188,11 +190,15 @@ a.bb.cc:80 {
 
 a.bb.cc:8443 {
         redir /admin /# 301
-        reverse_proxy :8000
-        tls /root/crt.pem /root/key.pem
+        reverse_proxy :8000 {
+                header_up X-Real-IP {remote_host}
+        }
+
+        tls /crt.pem /key.pem
 }
 </code></pre>
 <p>将<code class="notranslate">a.bb.cc</code>改为你的域名。如果使用443，直接删除<code class="notranslate">:8443</code>即可</p>
+<p>tls /crt.pem /key.pem 改为自己证书的目录</p>
 <p>端口 如果不使用cloudflare支持任意端口。请勿使用被占用的端口，其他程序可能会crashed。开机检查<code class="notranslate">rc-status</code><br>
 cloudflare只支持部分端口，参见 <a href="https://developers.cloudflare.com/fundamentals/reference/network-ports/" rel="nofollow">cloudflare</a></p>
 <p>修改完保存，再执行<code class="notranslate">caddy fmt --overwrite /etc/caddy/Caddyfile</code> 格式化一下caddyfile</p>
