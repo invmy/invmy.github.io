@@ -7,7 +7,7 @@
     "GMEEK_VERSION":"last",
     "startSite":"02/02/2025",
     "i18n":"CN",
-    "needComment":1,
+    "needComment":0,
     "showPostSource":0,
     "themeMode":"fix",
     "dayTheme":"dark",
