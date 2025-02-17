@@ -231,7 +231,7 @@ function generateHTML(images, folderName) {
 </head>
 <body>
     <!-- 返回主页按钮 -->
-    <a href="/" class="back-button">Go Back</a>
+    <a href="/link" class="back-button">Go Back</a>
     <br>
     <h1>${folderName}</h1>
     <div id="tag-cloud" class="tag-cloud">
