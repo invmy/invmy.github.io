@@ -1,0 +1,60 @@
+---
+import BlogCard from "@/components/BlogCard.astro"
+import MetaPage from "@/components/MetaPage.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getPosts } from "@/lib/content"
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const categorySet = new Set<string>();
+
+  posts.forEach((post) => {
+    const cat = post.data?.category;
+    const name = Array.isArray(cat) 
+      ? cat[0]?.name 
+      : (typeof cat === 'object' && cat !== null ? cat.name : cat);
+      
+    if (typeof name === 'string' && name) {
+      categorySet.add(name);
+    }
+  });
+
+  const paths = Array.from(categorySet).map((name) => ({
+    params: { category: name },
+  }));
+
+  paths.push({ params: { category: 'all' } });
+
+  return paths;
+}
+
+const { category } = Astro.params;
+const categoryName = Array.isArray(category) ? category.join('/') : category;
+
+const posts = await getPosts();
+
+const filteredPosts = !categoryName || categoryName === 'all'
+  ? posts
+  : posts.filter((post) => {
+      const cat = post.data?.category;
+      const name = Array.isArray(cat) 
+        ? cat[0]?.name 
+        : (typeof cat === 'object' && cat !== null ? cat.name : cat);
+      return name === categoryName;
+    });
+---
+
+<Layout>
+  <MetaPage slot="head" title={categoryName && categoryName !== 'all' ? `Category ${categoryName}` : "Blog"} />
+  <ul>
+    {filteredPosts.map((post) => <BlogCard post={post} />)}
+  </ul>
+</Layout>
+
+<style>
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+  }
+</style>
