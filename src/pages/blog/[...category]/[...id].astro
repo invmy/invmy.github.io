@@ -10,33 +10,44 @@ import { formatDate, isSubpost, subpostSlug } from "@/lib/utils"
 import { Image } from "astro:assets"
 import { getEntries, render, type CollectionEntry } from "astro:content"
 
+type Props = {
+  post: CollectionEntry<"blog">
+  chain: CollectionEntry<"blog">[]
+  prev?: CollectionEntry<"blog">
+  next?: CollectionEntry<"blog">
+}
+
+
 export async function getStaticPaths() {
   const posts = await getPosts()
   const series = await getSubposts()
-  return posts.flatMap((parent, i) => {
+
+  const getCat = (p:any) => {
+    const cat = p.data?.category;
+    return Array.isArray(cat) 
+      ? cat[0]?.name 
+      : (typeof cat === 'object' && cat !== null ? cat.name : (cat || 'all'));
+  };
+
+  return posts.flatMap((parent) => {
     const chain = [parent, ...(series.get(parent.id) ?? [])]
+    
     return chain.map((post) => {
-      const cat = post.data?.category;
-      const categoryName = Array.isArray(cat) 
-        ? cat[0]?.name 
-        : (typeof cat === 'object' && cat !== null ? cat.name : (cat || 'all'));
+      const categoryName = getCat(post);
+      const sameCategoryPosts = posts.filter(p => getCat(p) === categoryName);
+      const currentIndex = sameCategoryPosts.findIndex(p => p.id === parent.id);
+      const prev = sameCategoryPosts[currentIndex + 1];
+      const next = sameCategoryPosts[currentIndex - 1];
 
       return {
         params: { 
           category: categoryName, 
           id: post.id 
         },
-        props: { post, chain, prev: posts[i + 1], next: posts[i - 1] },
+        props: { post, chain, prev, next },
       }
     })
   })
-}
-
-type Props = {
-  post: CollectionEntry<"blog">
-  chain: CollectionEntry<"blog">[]
-  prev?: CollectionEntry<"blog">
-  next?: CollectionEntry<"blog">
 }
 
 const { post, chain, prev, next } = Astro.props
