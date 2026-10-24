@@ -21,28 +21,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 使用官方标准的 Node.js 环境（强制指定 22.24.0 或更高）
+      # 1. 使用官方标准的 Node.js 环境（满足 Astro >=22.23.4 的硬性要求）
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22.23.4"
           cache: 'npm'
 
-      # 2. 安装 Bun（用来跑超快的 bun install）
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
-      # 3. 使用 Bun 安装依赖（兼容项目原有的 bun.lockb）
+      # 2. 使用 npm 安装依赖，加入 --legacy-peer-deps 解决插件与 Astro 7 的版本冲突
       - name: Install dependencies
-        run: bun install
+        run: npm install --legacy-peer-deps
 
-      # 使用标准 npx 运行 Astro 构建
+      # 3. 使用标准 npx 运行 Astro 构建
       - name: Build with Astro
         run: |
           EXTRACTED_REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
