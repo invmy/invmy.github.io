@@ -1,6 +1,6 @@
 ---
-import MoonIcon from "@/assets/icons/moon.svg"
-import SunIcon from "@/assets/icons/sun.svg"
+import MoonIcon from "@/assets/icons/moon.svg";
+import SunIcon from "@/assets/icons/sun.svg";
 ---
 
 <button id="theme-toggle" data-icon-button aria-label="Toggle theme">
@@ -45,17 +45,38 @@ import SunIcon from "@/assets/icons/sun.svg"
 </style>
 
 <script>
+  const updateGiscusTheme = (theme: any) => {
+    // 使用泛型指定类型为 HTMLIFrameElement
+    const iframe = document.querySelector<HTMLIFrameElement>(
+      "iframe.giscus-frame",
+    );
+    if (!iframe || !iframe.contentWindow) return; // 确保 iframe 和 contentWindow 存在
+
+    iframe.contentWindow.postMessage(
+      {
+        giscus: {
+          setConfig: {
+            theme: theme,
+          },
+        },
+      },
+      "https://giscus.app",
+    );
+  };
+
   const toggleTheme = () => {
-    const root = document.documentElement
+    const root = document.documentElement;
     const dark =
       root.dataset.theme === "dark" ||
       (!root.dataset.theme &&
-        matchMedia("(prefers-color-scheme: dark)").matches)
-    const theme = dark ? "light" : "dark"
-    root.dataset.theme = theme
-    localStorage.theme = theme
-  }
+        matchMedia("(prefers-color-scheme: dark)").matches);
+    const theme = dark ? "light" : "dark";
+    root.dataset.theme = theme;
+    localStorage.theme = theme;
 
-  const button = document.getElementById("theme-toggle")
-  if (button) button.onclick = toggleTheme
+    updateGiscusTheme(theme);
+  };
+
+  const button = document.getElementById("theme-toggle");
+  if (button) button.onclick = toggleTheme;
 </script>
