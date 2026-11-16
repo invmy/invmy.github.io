@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import { SITE_URL } from "astro:env/client";
+
+const posts = await getCollection("posts");
+const archives = [...posts]
+    .sort(
+        (a, b) =>
+            new Date(b.data.published).getTime() -
+            new Date(a.data.published).getTime(),
+    )
+    .reduce<Record<string, typeof posts>>((acc, post) => {
+        const year = String(new Date(post.data.published).getUTCFullYear());
+        (acc[year] ??= []).push(post);
+        return acc;
+    }, {});
+
+const dayMonthFormatter = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    timeZone: "UTC",
+});
+
+const toDayMonth = (raw: Date | string) =>
+    `${dayMonthFormatter.format(new Date(raw))}.`;
+
+const toIsoDate = (raw: Date | string) =>
+    new Date(raw).toISOString().slice(0, 10);
+---
+
+<Layout title="Archives">
+    <main class="markdown-body archives">
+        <h1>Archives</h1>
+
+        {Object.entries(archives).map(([year, items]) => (
+            <section aria-labelledby={`y-${year}`}>
+                <h2 id={`y-${year}`}>{year}</h2>
+                <ul>
+                    {items.map((post) => {
+                        const href = `${SITE_URL}/p/${post.data.slug}/`;
+                        return (
+                            <li>
+                                <time datetime={toIsoDate(post.data.published)}>
+                                    {toDayMonth(post.data.published)}
+                                </time>
+                                <a href={href}>{post.data.title}</a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </section>
+        ))}
+    </main>
+</Layout>
+
+<style>
+    .markdown-body section ul {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0;
+    }
+
+    .markdown-body section li {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-top: 0;
+        padding-block: 0.1rem;
+    }
+
+    .archives time {
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .archives a {
+        flex: 1;
+        min-width: 0;
+        text-decoration: none;
+    }
+
+    .archives a:hover,
+    .archives a:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+    .archives a:visited {
+        opacity: 0.7;
+    }
+</style>

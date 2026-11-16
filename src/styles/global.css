@@ -1,0 +1,37 @@
+@import "github-markdown-css/github-markdown.css";
+@import 'satteri-callouts/theme/github';
+
+:root {
+    scrollbar-gutter: stable;
+    color-scheme: light dark;
+    max-width: 60ch;
+    margin: auto;
+    padding: 0 20px 0 20px;
+}
+
+body.markdown-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+body.markdown-body> :nth-child(2) {
+    flex: 1 0 auto;
+}
+
+body.markdown-body>footer {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+body.markdown-body :is(h1, h2, h3, h4, h5, h6) {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+body.markdown-body img {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+}

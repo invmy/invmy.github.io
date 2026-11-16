@@ -1,0 +1,185 @@
+---
+import {
+    GITHUB_REPO_OWNER,
+    GITHUB_REPO_NAME,
+    GITHUB_REPO_ID,
+} from "astro:env/client";
+import { SITE_URL } from "astro:env/client";
+
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import type { Post } from "github-discussions-blog-loader";
+import Layout from "@/layouts/Layout.astro";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const Posts = await getCollection("posts");
+    return Posts.map((p) => ({
+        params: {
+            slug: p.data.slug,
+        },
+        props: { post: p.data },
+    }));
+};
+
+type Props = { post: Post };
+const { post } = Astro.props;
+
+const extractFirstImg = (html = "") => {
+    const imgMatch = html.match(/<img\b[^>]*>/i);
+    if (!imgMatch) return { src: "", alt: "" };
+
+    const tag = imgMatch[0];
+    const srcMatch = tag.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+    const altMatch = tag.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+
+    const rawSrc = (srcMatch?.[1] ?? srcMatch?.[2] ?? "").trim();
+    const rawAlt = (altMatch?.[1] ?? altMatch?.[2] ?? "").trim();
+
+    return {
+        src: rawSrc,
+        alt: rawAlt || post.title || "",
+    };
+};
+
+const { src: firstImgUrl, alt: firstImgAlt } = extractFirstImg(post.body);
+
+const category = post.category;
+const tags: string[] = Array.isArray(post.tags) ? post.tags : [];
+
+const formatDateTime = (value?: string | Date) => {
+    if (!value) return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    });
+};
+
+const publishedText = formatDateTime(post.published);
+const updatedText =
+    post.updated && formatDateTime(post.updated) !== publishedText
+        ? formatDateTime(post.updated)
+        : "";
+---
+
+<Layout
+    type="article"
+    title={post.title}
+    description={post.description}
+    url={`p/${post.slug}`}
+    publishedTime={post.published}
+    modifiedTime={post.updated}
+    image={firstImgUrl}
+    imageAlt={firstImgAlt}
+>
+    <main>
+        <article class="post-article">
+            <header class="post-header">
+                {(category?.name || tags.length > 0) && (
+                    <div class="post-tags" aria-label="Category and tags">
+                        {category?.id && category?.name && (
+                            <a
+                                href={`${SITE_URL}/feed/?category=${encodeURIComponent(category.id)}`}
+                                class="post-category"
+                            >
+                                {category.name}
+                            </a>
+                        )}
+                        {tags.map((tag) => (
+                            <a
+                                href={`${SITE_URL}/feed/?tag=${encodeURIComponent(tag)}`}
+                                class="post-tag"
+                            >
+                                #{tag}
+                            </a>
+                        ))}
+                    </div>
+                )}
+
+                <h1 class="post-title">{post.title}</h1>
+
+                <div class="post-meta">
+                    {updatedText && (
+                        <code class="post-updated">
+                            <time datetime={String(post.updated)}>
+                                {updatedText}
+                            </time>
+                        </code>
+                    )}
+
+                    {publishedText && (
+                        <time datetime={String(post.published)}>
+                            {publishedText}
+                        </time>
+                    )}
+                    <span>{post.readingTime}</span>
+                </div>
+            </header>
+
+            <div class="post-body" set:html={post.body} />
+            <script
+                src="https://giscus.app/client.js"
+                data-repo={`${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}`}
+                data-repo-id={GITHUB_REPO_ID}
+                data-mapping="number"
+                data-term={post.githubDiscussionNumber}
+                data-reactions-enabled="1"
+                data-emit-metadata="1"
+                data-input-position="top"
+                data-theme="preferred_color_scheme"
+                data-lang="en"
+                data-loading="lazy"
+                crossorigin="anonymous"
+                async
+            ></script>
+        </article>
+    </main>
+</Layout>
+
+<style>
+    .post-header {
+        margin-bottom: 1em;
+    }
+
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.65rem;
+        font-size: 0.85rem;
+    }
+
+    .post-category,
+    .post-tag {
+        text-decoration: none;
+    }
+
+    .post-category:hover,
+    .post-category:focus-visible,
+    .post-tag:hover,
+    .post-tag:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+
+    .post-article h1.post-title {
+        margin: 0 0 0.45rem;
+        padding: 0;
+        border: 0;
+        font-family: serif;
+        line-height: 1.25;
+    }
+
+    .post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 1rem;
+        font-size: 0.85rem;
+        font-variant-numeric: tabular-nums;
+    }
+</style>

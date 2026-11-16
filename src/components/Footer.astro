@@ -1,0 +1,97 @@
+---
+import { SITE_TITLE, SITE_URL } from "astro:env/client";
+
+const year = new Date().getFullYear();
+
+const items = [
+    {
+        label: "RSS",
+        href: `${SITE_URL}/rss.xml`,
+        icon: `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1-4a1 1 0 0 1 1-1c3.866 0 7 3.134 7 7a1 1 0 1 1-2 0 5 5 0 0 0-5-5 1 1 0 0 1-1-1Zm0-4a1 1 0 0 1 1-1c6.075 0 11 4.925 11 11a1 1 0 1 1-2 0 9 9 0 0 0-9-9 1 1 0 0 1-1-1Z"/></svg>`,
+    },
+    {
+        label: "SiteMap",
+        href: `${SITE_URL}/sitemap-index.xml`,
+        icon: "",
+    },
+];
+---
+
+<footer class="footer-inner">
+    <p class="footer-copy">
+        <span aria-hidden="true">Copyright @</span>
+        <span>{year}</span> <a href={SITE_URL}>{SITE_TITLE}</a>
+    </p>
+
+    {items.length > 0 && (
+        <nav aria-label="Footer links">
+            <ul class="footer-list">
+                {items.map((item) => {
+                    const isExternal = /^https?:\/\//i.test(item.href);
+                    return (
+                        <li>
+                            <a
+                                href={item.href}
+                                class="footer-link"
+                                target={isExternal ? "_blank" : undefined}
+                                rel={
+                                    isExternal
+                                        ? "noopener noreferrer"
+                                        : undefined
+                                }
+                            >
+                                {item.icon && (
+                                    <span
+                                        class="footer-icon"
+                                        aria-hidden="true"
+                                        set:html={item.icon}
+                                    />
+                                )}
+                                <span>{item.label}</span>
+                            </a>
+                        </li>
+                    );
+                })}
+            </ul>
+        </nav>
+    )}
+</footer>
+
+<style>
+    footer.footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    footer.footer-inner .footer-copy,
+    footer.footer-inner ul.footer-list {
+        margin: 0;
+        padding: 0;
+    }
+
+    footer.footer-inner ul.footer-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        list-style: none;
+    }
+
+    footer.footer-inner ul.footer-list > li {
+        margin: 0;
+    }
+
+    .footer-link {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .footer-icon :global(svg) {
+        width: 1em;
+        height: 1em;
+        display: block;
+    }
+</style>

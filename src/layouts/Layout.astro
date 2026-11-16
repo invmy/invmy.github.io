@@ -1,0 +1,160 @@
+---
+import { i18n } from "astro:config/client";
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "astro:env/client";
+
+import "@/styles/global.css";
+import Nav from "@/components/Nav.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+	title?: string;
+	description?: string;
+	url?: string;
+	image?: string;
+	imageAlt?: string;
+	type?: "article" | "website";
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description,
+	url,
+	image,
+	imageAlt,
+	type = "website",
+	publishedTime,
+	modifiedTime,
+	noindex = false,
+} = Astro.props;
+
+const siteName = SITE_TITLE;
+const head_title = title ? `${title} - ${siteName}` : siteName;
+const head_description = description ?? SITE_DESCRIPTION ?? "";
+const canonicalUrl = `${SITE_URL}/${url}`;
+const ogImageUrl = image ? image : undefined;
+
+const jsonLd =
+	type === "article"
+		? {
+				"@context": "https://schema.org",
+				"@type": "BlogPosting",
+				headline: title ?? siteName,
+				description: head_description,
+				...(ogImageUrl ? { image: ogImageUrl } : {}),
+				...(publishedTime
+					? { datePublished: publishedTime.toISOString() }
+					: {}),
+				...(modifiedTime
+					? { dateModified: modifiedTime.toISOString() }
+					: {}),
+				author: {
+					"@type": "Person",
+					name: siteName,
+					url: `${SITE_URL}`,
+				},
+				mainEntityOfPage: {
+					"@type": "WebPage",
+					"@id": canonicalUrl,
+				},
+			}
+		: {
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				name: siteName,
+				description: head_description,
+				url: SITE_URL,
+			};
+
+const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang={i18n?.defaultLocale}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>{head_title}</title>
+		<meta name="description" content={head_description} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<meta
+			name="robots"
+			content={
+				noindex
+					? "noindex, follow"
+					: "index, follow, max-image-preview:large"
+			}
+		/>
+		<meta name="color-scheme" content="dark light" />
+		<meta name="generator" content={Astro.generator} />
+		<link
+			rel="icon"
+			type="image/png"
+			href={`${SITE_URL}/favicon-96x96.png`}
+			sizes="96x96"
+		/>
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href={`${SITE_URL}/favicon.svg`}
+		/>
+		<link rel="shortcut icon" href={`${SITE_URL}/favicon.ico`} />
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href={`${SITE_URL}/apple-touch-icon.png`}
+		/>
+		<meta name="apple-mobile-web-app-title" content="MyWebSite" />
+		<link rel="manifest" href={`${SITE_URL}/site.webmanifest`} />
+
+		<link
+			rel="sitemap"
+			type="application/xml"
+			href={`${SITE_URL}/sitemap-index.xml`}
+		/>
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title={`${siteName} RSS`}
+			href={`${SITE_URL}/rss.xml`}
+		/>
+
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={title ?? siteName} />
+		<meta property="og:description" content={head_description} />
+		<meta property="og:url" content={canonicalUrl} />
+		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+		{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+		<meta property="og:locale" content={i18n?.defaultLocale} />
+
+		{type === "article" && publishedTime && (
+			<meta
+				property="article:published_time"
+				content={publishedTime.toISOString()}
+			/>
+		)}
+		{type === "article" && modifiedTime && (
+			<meta
+				property="article:modified_time"
+				content={modifiedTime.toISOString()}
+			/>
+		)}
+
+		<meta
+			name="twitter:card"
+			content={ogImageUrl ? "summary_large_image" : "summary"}
+		/>
+
+		<script type="application/ld+json" set:html={jsonLdString} />
+	</head>
+	<body class="markdown-body">
+		<Nav />
+		<slot />
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,437 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import { SITE_URL } from "astro:env/client";
+
+const extractFirstImg = (html = "") => {
+    const cleanHtml = html.replace(/<(pre|code)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
+    const imgMatch = cleanHtml.match(/<img\b[^>]*>/i);
+    if (!imgMatch) return { src: "", alt: "" };
+
+    const tag = imgMatch[0];
+    const srcMatch = tag.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+    const altMatch = tag.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+
+    return {
+        src: (srcMatch?.[1] ?? srcMatch?.[2] ?? "").trim(),
+        alt: (altMatch?.[1] ?? altMatch?.[2] ?? "").trim(),
+    };
+};
+
+const formatDateTime = (value?: string | Date) => {
+    if (!value) return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        // hour: "2-digit",
+        // minute: "2-digit",
+        hour12: false,
+    });
+};
+
+const rawPosts = await getCollection("posts");
+
+const posts = rawPosts
+    .map((entry) => {
+        const d = entry.data as Record<string, any>;
+        const categoryId = d.category?.id ? String(d.category.id) : "";
+        const categoryName = d.category?.name
+            ? String(d.category.name)
+            : categoryId;
+        const tags: string[] = Array.isArray(d.tags)
+            ? d.tags.map((t: unknown) => String(t).trim()).filter(Boolean)
+            : [];
+
+        const publishedDate = d.published ? new Date(d.published) : null;
+        const updatedDate = d.updated ? new Date(d.updated) : null;
+        const publishedMs =
+            publishedDate && !Number.isNaN(publishedDate.getTime())
+                ? publishedDate.getTime()
+                : 0;
+
+        const publishedText = formatDateTime(d.published);
+        const rawUpdatedText = formatDateTime(d.updated);
+        const updatedText =
+            rawUpdatedText && rawUpdatedText !== publishedText
+                ? rawUpdatedText
+                : "";
+
+        const cover = extractFirstImg(d.body ? String(d.body) : "");
+
+        return {
+            title: String(d.title || "Untitled"),
+            href: `${SITE_URL}/p/${d.slug}`,
+            categoryId,
+            categoryName,
+            tags,
+            publishedMs,
+            publishedIso:
+                publishedDate && !Number.isNaN(publishedDate.getTime())
+                    ? publishedDate.toISOString()
+                    : String(d.published || ""),
+            publishedText,
+            updatedIso:
+                updatedDate && !Number.isNaN(updatedDate.getTime())
+                    ? updatedDate.toISOString()
+                    : String(d.updated || ""),
+            updatedText,
+            coverSrc: cover.src,
+            coverAlt: cover.alt || String(d.title || ""),
+        };
+    })
+    .sort((a, b) => b.publishedMs - a.publishedMs);
+
+const categoryMap = new Map<string, string>();
+const tagSet = new Set<string>();
+
+for (const p of posts) {
+    if (p.categoryId) {
+        categoryMap.set(p.categoryId, p.categoryName || p.categoryId);
+    }
+    for (const t of p.tags) {
+        tagSet.add(t);
+    }
+}
+
+const categories = Array.from(categoryMap.entries()).map(([id, name]) => ({
+    id,
+    name,
+}));
+const allTags = Array.from(tagSet).sort((a, b) => a.localeCompare(b));
+---
+
+<Layout title="Feed">
+    <main class="feed-page">
+        <h1>Feed</h1>
+
+        <h2>Categories</h2>
+        <div id="category-list">
+            {categories.map((cat) => (
+                <button
+                    type="button"
+                    class="facet-btn"
+                    data-facet="category"
+                    data-value={cat.id}
+                    aria-pressed="false"
+                >
+                    {cat.name}
+                </button>
+            ))}
+        </div>
+
+        <h2>Tags</h2>
+        <div id="tag-list">
+            {allTags.map((tag) => (
+                <button
+                    type="button"
+                    class="facet-btn"
+                    data-facet="tag"
+                    data-value={tag}
+                    aria-pressed="false"
+                >
+                    #{tag}
+                </button>
+            ))}
+        </div>
+
+        <p class="feed-bar">
+            <button
+                type="button"
+                id="feed-summary"
+                aria-label="Reset filters"
+            ></button>
+        </p>
+
+        <ul class="feed-list" id="feed-list">
+            {posts.map((post) => (
+                <li
+                    class="feed-entry"
+                    data-category={post.categoryId}
+                    data-tags={JSON.stringify(post.tags)}
+                >
+                    <div class="feed-card">
+                        {post.coverSrc && (
+                            <a href={post.href} tabindex="-1">
+                                <img
+                                    src={post.coverSrc}
+                                    alt={post.coverAlt}
+                                    loading="lazy"
+                                />
+                            </a>
+                        )}
+                        <div class="feed-meta">
+                            <div class="feed-time">
+                                {post.publishedText && (
+                                    <time datetime={post.publishedIso}>
+                                        {post.publishedText}
+                                    </time>
+                                )}
+                                {post.updatedText && (
+                                    <code>
+                                        <time datetime={post.updatedIso}>
+                                            {post.updatedText}
+                                        </time>
+                                    </code>
+                                )}
+                            </div>
+                            <a href={post.href} class="feed-title">
+                                <h3>{post.title}</h3>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            ))}
+        </ul>
+    </main>
+</Layout>
+
+<script is:inline>
+    (() => {
+        const categoryBtns = Array.from(
+            document.querySelectorAll('#category-list [data-facet="category"]'),
+        );
+        const tagBtns = Array.from(
+            document.querySelectorAll('#tag-list [data-facet="tag"]'),
+        );
+        const items = Array.from(
+            document.querySelectorAll("#feed-list .feed-entry"),
+        );
+        const summaryBtn = document.getElementById("feed-summary");
+
+        if (!items.length) return;
+
+        const basePath = window.location.pathname || `${SITE_URL}/feed/`;
+
+        const parsedItems = items.map((el) => {
+            const category = el.dataset.category || "";
+            let tags = [];
+            try {
+                const parsed = JSON.parse(el.dataset.tags || "[]");
+                if (Array.isArray(parsed)) tags = parsed.map(String);
+            } catch {}
+            return { el, category, tags };
+        });
+
+        const readStateFromUrl = () => {
+            const params = new URLSearchParams(window.location.search);
+            const category = (params.get("category") || "").trim();
+            const tags = params
+                .getAll("tag")
+                .flatMap((v) => v.split(","))
+                .map((s) => s.trim())
+                .filter(Boolean);
+            return {
+                category,
+                tags: Array.from(new Set(tags)),
+            };
+        };
+
+        const writeStateToUrl = (state, replace = false) => {
+            const params = new URLSearchParams();
+            if (state.category) params.set("category", state.category);
+            for (const t of state.tags) params.append("tag", t);
+            const qs = params.toString();
+            const nextUrl = qs ? `${basePath}?${qs}` : basePath;
+            if (replace) {
+                window.history.replaceState(null, "", nextUrl);
+            } else {
+                window.history.pushState(null, "", nextUrl);
+            }
+        };
+
+        let state = readStateFromUrl();
+
+        const matchesFilters = (item, activeCategory, activeTags) => {
+            if (activeCategory && item.category !== activeCategory)
+                return false;
+            if (activeTags.length > 0) {
+                for (const t of activeTags) {
+                    if (!item.tags.includes(t)) return false;
+                }
+            }
+            return true;
+        };
+
+        const render = () => {
+            const matched = [];
+            for (const item of parsedItems) {
+                const ok = matchesFilters(item, state.category, state.tags);
+                item.el.hidden = !ok;
+                if (ok) matched.push(item);
+            }
+
+            const availableCategories = new Set();
+            const availableTags = new Set();
+            for (const item of matched) {
+                if (item.category) availableCategories.add(item.category);
+                for (const t of item.tags) availableTags.add(t);
+            }
+
+            for (const btn of categoryBtns) {
+                const val = btn.dataset.value || "";
+                const isSelected = state.category === val;
+                const isAvailable = availableCategories.has(val) || isSelected;
+                btn.disabled = !isAvailable;
+                btn.setAttribute("aria-pressed", String(isSelected));
+                btn.classList.toggle("active", isSelected);
+            }
+
+            for (const btn of tagBtns) {
+                const val = btn.dataset.value || "";
+                const isSelected = state.tags.includes(val);
+                const isAvailable = availableTags.has(val) || isSelected;
+                btn.disabled = !isAvailable;
+                btn.setAttribute("aria-pressed", String(isSelected));
+                btn.classList.toggle("active", isSelected);
+            }
+
+            const hasFilter =
+                Boolean(state.category) ||
+                state.tags.length > 0 ||
+                matched.length !== parsedItems.length;
+
+            if (summaryBtn) {
+                summaryBtn.textContent = `${matched.length} / ${parsedItems.length}`;
+                summaryBtn.classList.toggle("active", hasFilter);
+            }
+        };
+
+        document
+            .getElementById("category-list")
+            ?.addEventListener("click", (e) => {
+                const btn = e.target.closest('[data-facet="category"]');
+                if (!btn || btn.disabled) return;
+                const val = btn.dataset.value || "";
+                state.category = state.category === val ? "" : val;
+                writeStateToUrl(state);
+                render();
+            });
+
+        document.getElementById("tag-list")?.addEventListener("click", (e) => {
+            const btn = e.target.closest('[data-facet="tag"]');
+            if (!btn || btn.disabled) return;
+            const val = btn.dataset.value || "";
+            if (state.tags.includes(val)) {
+                state.tags = state.tags.filter((t) => t !== val);
+            } else {
+                state.tags = [...state.tags, val];
+            }
+            writeStateToUrl(state);
+            render();
+        });
+
+        summaryBtn?.addEventListener("click", () => {
+            state = { category: "", tags: [] };
+            window.history.pushState(null, "", basePath);
+            render();
+        });
+
+        window.addEventListener("popstate", () => {
+            state = readStateFromUrl();
+            render();
+        });
+
+        render();
+    })();
+</script>
+
+<style>
+    .feed-page h1 {
+        margin-top: 0;
+    }
+    .feed-page h3 {
+        margin: 0;
+    }
+
+    .facet-btn {
+        font: inherit;
+        font-size: 0.85rem;
+        padding: 0;
+        margin-right: 0.6rem;
+        border: 0;
+        background: none;
+        color: LinkText;
+        cursor: pointer;
+    }
+
+    .facet-btn.active {
+        color: inherit;
+    }
+
+    .facet-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .feed-bar {
+        display: flex;
+        justify-content: center;
+        font-size: 0.85rem;
+    }
+
+    #feed-summary {
+        font: inherit;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+        font-variant-numeric: tabular-nums;
+        font-size: 2em;
+    }
+
+    #feed-summary.active {
+        color: LinkText;
+    }
+
+    .feed-list {
+        list-style: none;
+        padding-left: 0;
+        columns: 2;
+        column-gap: 1rem;
+    }
+
+    .feed-entry {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+
+    .feed-card {
+        background: var(--bgColor-muted);
+        box-shadow: inset 0 -1px 0 var(--borderColor-neutral-muted);
+        border: solid 1px var(--borderColor-neutral-muted);
+    }
+
+    .feed-meta {
+        padding: 1rem 0.65rem;
+    }
+
+    .feed-entry a.feed-title,
+    .feed-entry a.feed-title:hover,
+    .feed-entry a.feed-title:active,
+    .feed-entry a.feed-title:visited {
+        color: inherit;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .feed-entry time {
+        font-size: 0.8em;
+        font-variant-numeric: tabular-nums;
+    }
+    .feed-time {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin-bottom: 0.2em;
+    }
+    @media (max-width: 480px) {
+        .feed-list {
+            columns: 1;
+        }
+    }
+</style>
