@@ -30,7 +30,7 @@ const toIsoDate = (raw: Date | string) =>
 ---
 
 <Layout title="Archives">
-    <main class="markdown-body archives">
+    <div class="markdown-body archives">
         <h1>Archives</h1>
 
         {Object.entries(archives).map(([year, items]) => (
@@ -51,7 +51,7 @@ const toIsoDate = (raw: Date | string) =>
                 </ul>
             </section>
         ))}
-    </main>
+    </div>
 </Layout>
 
 <style>

@@ -154,7 +154,9 @@ const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 	</head>
 	<body class="markdown-body">
 		<Nav />
-		<slot />
+		<main class="site-main">
+			<slot />
+		</main>
 		<Footer />
 	</body>
 </html>

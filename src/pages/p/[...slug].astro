@@ -77,68 +77,66 @@ const updatedText =
     image={firstImgUrl}
     imageAlt={firstImgAlt}
 >
-    <main>
-        <article class="post-article">
-            <header class="post-header">
-                {(category?.name || tags.length > 0) && (
-                    <div class="post-tags" aria-label="Category and tags">
-                        {category?.id && category?.name && (
-                            <a
-                                href={`${SITE_URL}/feed/?category=${encodeURIComponent(category.id)}`}
-                                class="post-category"
-                            >
-                                {category.name}
-                            </a>
-                        )}
-                        {tags.map((tag) => (
-                            <a
-                                href={`${SITE_URL}/feed/?tag=${encodeURIComponent(tag)}`}
-                                class="post-tag"
-                            >
-                                #{tag}
-                            </a>
-                        ))}
-                    </div>
+    <article class="post-article">
+        <header class="post-header">
+            {(category?.name || tags.length > 0) && (
+                <div class="post-tags" aria-label="Category and tags">
+                    {category?.id && category?.name && (
+                        <a
+                            href={`${SITE_URL}/feed/?category=${encodeURIComponent(category.id)}`}
+                            class="post-category"
+                        >
+                            {category.name}
+                        </a>
+                    )}
+                    {tags.map((tag) => (
+                        <a
+                            href={`${SITE_URL}/feed/?tag=${encodeURIComponent(tag)}`}
+                            class="post-tag"
+                        >
+                            #{tag}
+                        </a>
+                    ))}
+                </div>
+            )}
+
+            <h1 class="post-title">{post.title}</h1>
+
+            <div class="post-meta">
+                {updatedText && (
+                    <code class="post-updated">
+                        <time datetime={String(post.updated)}>
+                            {updatedText}
+                        </time>
+                    </code>
                 )}
 
-                <h1 class="post-title">{post.title}</h1>
+                {publishedText && (
+                    <time datetime={String(post.published)}>
+                        {publishedText}
+                    </time>
+                )}
+                <span>{post.readingTime}</span>
+            </div>
+        </header>
 
-                <div class="post-meta">
-                    {updatedText && (
-                        <code class="post-updated">
-                            <time datetime={String(post.updated)}>
-                                {updatedText}
-                            </time>
-                        </code>
-                    )}
-
-                    {publishedText && (
-                        <time datetime={String(post.published)}>
-                            {publishedText}
-                        </time>
-                    )}
-                    <span>{post.readingTime}</span>
-                </div>
-            </header>
-
-            <div class="post-body" set:html={post.body} />
-            <script
-                src="https://giscus.app/client.js"
-                data-repo={`${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}`}
-                data-repo-id={GITHUB_REPO_ID}
-                data-mapping="number"
-                data-term={post.githubDiscussionNumber}
-                data-reactions-enabled="1"
-                data-emit-metadata="1"
-                data-input-position="top"
-                data-theme="preferred_color_scheme"
-                data-lang="en"
-                data-loading="lazy"
-                crossorigin="anonymous"
-                async
-            ></script>
-        </article>
-    </main>
+        <div class="post-body" set:html={post.body} />
+        <script
+            src="https://giscus.app/client.js"
+            data-repo={`${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}`}
+            data-repo-id={GITHUB_REPO_ID}
+            data-mapping="number"
+            data-term={post.githubDiscussionNumber}
+            data-reactions-enabled="1"
+            data-emit-metadata="1"
+            data-input-position="top"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async
+        ></script>
+    </article>
 </Layout>
 
 <style>

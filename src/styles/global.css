@@ -13,15 +13,17 @@ body.markdown-body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
+    margin: 0;
 }
 
-body.markdown-body> :nth-child(2) {
+body.markdown-body>.site-main {
     flex: 1 0 auto;
+    min-height: 0;
 }
 
 body.markdown-body>footer {
     margin-top: 2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
 }
 
 body.markdown-body :is(h1, h2, h3, h4, h5, h6) {

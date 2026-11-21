@@ -29,8 +29,8 @@ export default defineConfig({
     },
     env: {
         schema: {
-            SITE_TITLE: envField.string({ context: "client", access: "public", default: "Guava", optional: true }),
-            SITE_DESCRIPTION: envField.string({ context: "client", access: "public", default: "Guava Bolg theme", optional: true }),
+            SITE_TITLE: envField.string({ context: "client", access: "public", default: "invmy blog's", optional: true }),
+            SITE_DESCRIPTION: envField.string({ context: "client", access: "public", default: "this is my blog theme, i am a trader", optional: true }),
             SITE_URL: envField.string({ context: "client", access: "public", default: URL, optional: true }),
             GITHUB_ACCESS_TOKEN: envField.string({ context: "server", access: "secret", optional: false }),
             GITHUB_REPO_OWNER: envField.string({ context: "client", access: "public", optional: false }),
